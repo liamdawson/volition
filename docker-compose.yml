@@ -1,0 +1,48 @@
+version: '3.7'
+services:
+  migrations:
+    restart: on-failure
+    build: .
+    command: bundle exec rails db:migrate
+    env_file:
+      - ".env.sample"
+    environment:
+      - RACK_ENV=production
+      - DATABASE_URL=postgres://postgres@postgres:5432/volition_development
+      - REDISTOGO_URL=redis://redis:6379
+
+  web:
+    build: .
+    command: bundle exec puma -p 3000 -C ./config/puma.rb
+    env_file:
+      - ".env.sample"
+    environment:
+      - RACK_ENV=production
+      - DATABASE_URL=postgres://postgres@postgres:5432/volition_development
+      - REDISTOGO_URL=redis://redis:6379
+    ports:
+      - "3000:3000"
+
+  worker:
+    build: .
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    env_file:
+      - ".env.sample"
+    environment:
+      - RACK_ENV=production
+      - DATABASE_URL=postgres://postgres:5432/volition_development
+      - REDISTOGO_URL=redis://redis:6379
+
+  redis:
+    image: redis:4.0
+    expose:
+      - 6379
+
+  postgres:
+    image: postgres:12.1
+    environment:
+      - POSTGRES_DB=volition_development
+    volumes:
+      - /var/lib/postgresql/data
+    expose:
+      - 5432

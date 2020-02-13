@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby "2.4.0"
+ruby "2.4.9"
 
 gem "autoprefixer-rails"
 gem "flutie"
@@ -39,7 +39,6 @@ gem 'google_sign_in'
 gem 'google-id-token', git: 'https://github.com/google/google-id-token.git'
 gem 'enumerize'
 gem "gibbon"
-gem 'premailer-rails'
 gem 'rails-erd'
 gem "payola-payments", git: "https://github.com/payolapayments/payola.git", branch: "master"
 
